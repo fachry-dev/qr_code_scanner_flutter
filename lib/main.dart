@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:qr_scanner/splash_screen.dart';
 import 'package:qr_scanner/home/home_view.dart';
 import 'package:qr_scanner/qr_code/qr_code_view.dart';
 // import 'package:qr_scanner/settings/setting_view.dart';
@@ -13,22 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ScanGo',
       debugShowCheckedModeBanner: false,
+      title: 'ScanGo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF43A078),
-          primary: const Color(0xFF43A078),
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF43A078)),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF1F8E9), 
-      ),
-      
-  
-      initialRoute: '/',
-      
+      ),      
+      initialRoute: '/splash', 
       routes: {
-        '/': (context) => HomeView(),
+        // '/splash': (context) => const SplashScreen(),
+        '/home': (context) => HomeView(),
         '/qr_scan': (context) => QrCodeView(),
         // '/settings': (context) => const SettingView(),
       },
