@@ -12,8 +12,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    // Berpindah ke home setelah 3 detik
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/home');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     });
   }
 
@@ -25,19 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Logo QR ScanGo
-            Container(
-              width: 150,
-              height: 150,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/logo_splash_screen.png'),
-                  fit: BoxFit.contain,
-                ),
-              ),
+            // Gunakan logo QR yang kamu miliki
+            const Icon(
+              Icons.qr_code_scanner, 
+              size: 100, 
+              color: Color(0xFF43A078),
             ),
-            const SizedBox(height: 10),
-            // Teks ScanGo
+            const SizedBox(height: 20),
             const Text(
               'ScanGo',
               style: TextStyle(
@@ -45,7 +42,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 fontSize: 42,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF43A078),
-                letterSpacing: 1.2,
               ),
             ),
             const Text(
@@ -55,7 +51,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 fontWeight: FontWeight.w300,
                 fontSize: 16,
                 color: Colors.grey,
-                letterSpacing: 1.0,
               ),
             ),
           ],
