@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:qr_scanner/qr_code/qr_code_view.dart';
-import 'package:qr_scanner/features/history/models/ticket_model.dart'; //
+import '../models/ticket_model.dart';
 
-class HomeController {
+class HistoryController {
   final ValueNotifier<List<TicketModel>> historyNotifier = ValueNotifier<List<TicketModel>>([
     TicketModel(id: '1', name: 'FACHRY WARDANA', studentClass: 'XI PPLG', isRedeemed: false),
     TicketModel(id: '2', name: 'RIZQI NOVILLA', studentClass: 'XI TRKJ', isRedeemed: true),
   ]);
 
-  void addTicketToHistory(String name, String studentClass, bool status) {
+  void addTicket(String name, String studentClass, bool status) {
     final newTicket = TicketModel(
       id: DateTime.now().toString(),
       name: name,
@@ -16,12 +15,5 @@ class HomeController {
       isRedeemed: status,
     );
     historyNotifier.value = [newTicket, ...historyNotifier.value];
-  }
-
-  void goToQRCodeView(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => QrCodeView()),
-    );
   }
 }

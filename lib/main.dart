@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:qr_scanner/splash_screen.dart';
 import 'package:qr_scanner/home/home_view.dart';
+import 'package:qr_scanner/generate_qr/generate_qr_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeView(),
         // Tambahkan rute lain jika sudah ada pagenya
         // '/settings': (context) => const SettingView(),
+        '/generate': (context) => const GenerateQrView(),
       },
     );
   }

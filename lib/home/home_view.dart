@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_scanner/home/home_controller.dart';
+import 'package:qr_scanner/features/history/models/ticket_model.dart'; 
+import 'package:qr_scanner/features/history/widgets/history_card.dart'; 
 
 class HomeView extends StatelessWidget {
   final HomeController controller = HomeController();
@@ -17,6 +19,7 @@ class HomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
+              // Header Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -45,79 +48,74 @@ class HomeView extends StatelessWidget {
               const Text(
                 'Hai User 👋',
                 style: TextStyle(
-                  fontFamily: 'Outfit',
-                  fontSize: 16, 
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500
-                ),
+                    fontFamily: 'Outfit',
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 20),
 
+              // Menu Grid Section
+              Row(
+                children: [
+                  _buildMenuCard(
+                    title: 'Generate QR',
+                    subtitle: 'Create QR fast',
+                    icon: Icons.qr_code_2,
+                    onTap: () => Navigator.pushNamed(context, '/generate'),
+                  ),
+                  const SizedBox(width: 16),
+                  _buildMenuCard(
+                    title: 'Scan Qr',
+                    subtitle: 'Scan any ticket',
+                    icon: Icons.qr_code_scanner,
+                    onTap: () => controller.goToQRCodeView(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _buildMenuCard(
+                    title: 'Send',
+                    subtitle: 'Send to mail',
+                    icon: Icons.mail_outline,
+                    onTap: () {},
+                  ),
+                  const SizedBox(width: 16),
+                  _buildMenuCard(
+                    title: 'Print',
+                    subtitle: 'Print ticket',
+                    icon: Icons.print_outlined,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+              
+              const SizedBox(height: 30),
+              const Text(
+                'Recent History',
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF43A078),
+                ),
+              ),
+              const SizedBox(height: 16),
               Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        _buildMenuCard(
-                          title: 'Generate QR',
-                          subtitle: 'Create QR fast',
-                          icon: Icons.qr_code_2,
-                          onTap: () {},
-                        ),
-                        const SizedBox(width: 16),
-                        _buildMenuCard(
-                          title: 'Scan Qr',
-                          subtitle: 'Scan any ticket',
-                          icon: Icons.qr_code_scanner,
-                          onTap: () => controller.goToQRCodeView(context),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        _buildMenuCard(
-                          title: 'Send',
-                          subtitle: 'Send to mail',
-                          icon: Icons.mail_outline,
-                          onTap: () {},
-                        ),
-                        const SizedBox(width: 16),
-                        _buildMenuCard(
-                          title: 'Print',
-                          subtitle: 'Print ticket',
-                          icon: Icons.print_outlined,
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                  
-                    SizedBox(
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Navigasi ke Riwayat/History
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF43A078),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'History',
-                          style: TextStyle(
-                            fontFamily: 'Outfit',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: ValueListenableBuilder<List<TicketModel>>(
+                  valueListenable: controller.historyNotifier, 
+                  builder: (context, tickets, _) {
+                    return ListView.separated(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      itemCount: tickets.length,
+                      separatorBuilder: (context, index) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        return HistoryCard(ticket: tickets[index]);
+                      },
+                    );
+                  },
                 ),
               ),
 
@@ -144,7 +142,6 @@ class HomeView extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildMenuCard({
     required String title,
     required String subtitle,
