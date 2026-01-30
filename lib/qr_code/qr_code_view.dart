@@ -30,9 +30,7 @@ class QrCodeView extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          MobileScanner(
-            onDetect: (capture) => controller.scanQRCode(capture),
-          ),
+          MobileScanner(onDetect: (capture) => controller.scanQRCode(capture)),
           ColorFiltered(
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.5),
@@ -75,7 +73,10 @@ class QrCodeView extends StatelessWidget {
               ),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 50,
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   height: 55,

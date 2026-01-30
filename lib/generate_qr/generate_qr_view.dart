@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr_scanner/generate_qr/generate_qr_controller.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'dart:typed_data';
 
 class GenerateQrView extends StatefulWidget {
   const GenerateQrView({super.key});
@@ -10,79 +12,63 @@ class GenerateQrView extends StatefulWidget {
 }
 
 class _GenerateQrViewState extends State<GenerateQrView> {
-  final GenerateQrController controller = GenerateQrController();
+  final ScreenshotController screenshotController = ScreenshotController();
+  final TextEditingController textController = TextEditingController();
+  String qrData = "";
+
+  Future<void> _saveQrCode() async {
+  await screenshotController.capture().then((Uint8List? image) async {
+    if (image != null) {
+      final result = await ImageGallerySaver.saveImage(image);
+
+      if (!mounted) return; 
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("QR Code disimpan ke Galeri!")),
+      );
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F8E9), 
-      appBar: AppBar(
-        title: const Text('Generate QR Code', style: TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
+      backgroundColor: const Color(0xFFF1F8E9),
+      appBar: AppBar(title: const Text('Generate QR')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            const SizedBox(height: 20),
             TextField(
-              controller: controller.textController,
-              decoration: InputDecoration(
-                hintText: "Enter text or ticket ID",
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+              controller: textController,
+              decoration: InputDecoration(hintText: "Masukkan data tiket"),
+              onChanged: (val) => setState(() => qrData = val),
+            ),
+            const SizedBox(height: 30),
+            if (qrData.isNotEmpty) ...[
+              Screenshot(
+                controller: screenshotController,
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  color: Colors.white,
+                  child: QrImageView(
+                    data: qrData,
+                    size: 200,
+                    foregroundColor: const Color(0xFF43A078),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                onPressed: () => controller.generateCode(() => setState(() {})),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _saveQrCode,
+                icon: const Icon(Icons.download),
+                label: const Text("Download QR Code"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF43A078),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text("Generate Now", 
-                  style: TextStyle(fontFamily: 'Outfit', color: Colors.white, fontSize: 18)),
-              ),
-            ),
-            
-            const SizedBox(height: 40),
-
-            if (controller.qrData.isNotEmpty)
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    QrImageView(
-                      data: controller.qrData,
-                      version: QrVersions.auto,
-                      size: 250.0,
-                      gapless: false,
-                      foregroundColor: const Color(0xFF43A078), // QR berwarna hijau
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Data: ${controller.qrData}",
-                      style: const TextStyle(fontFamily: 'Outfit', color: Colors.grey),
-                    ),
-                  ],
+                  foregroundColor: Colors.white,
                 ),
               ),
+            ]
           ],
         ),
       ),

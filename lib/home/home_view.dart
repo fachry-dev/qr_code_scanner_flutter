@@ -12,9 +12,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF1F8E9),
-      body: Stack( // Menggunakan Stack agar History bisa menumpuk di atas menu
+      body: Stack(
         children: [
-          // 1. HALAMAN UTAMA (Dashboard Menu)
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -22,7 +21,6 @@ class HomeView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  // Header (ScanGo & Settings)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -74,9 +72,9 @@ class HomeView extends StatelessWidget {
 
           // 2. FITUR HISTORY SLIDE UP (Buka-Tutup)
           DraggableScrollableSheet(
-            initialChildSize: 0.12, // Ukuran saat kecil (hanya tulisan/logo)
-            minChildSize: 0.12,     // Ukuran minimal
-            maxChildSize: 0.9,      // Ukuran saat ditarik full ke atas
+            initialChildSize: 0.12, 
+            minChildSize: 0.12,    
+            maxChildSize: 0.9,      
             builder: (context, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
@@ -86,7 +84,6 @@ class HomeView extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    // Handle Bar & Logo Scroll Up
                     const SizedBox(height: 12),
                     Container(
                       width: 40,
@@ -105,8 +102,6 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 10),
-
-                    // List History yang bisa di-scroll
                     Expanded(
                       child: ValueListenableBuilder<List<TicketModel>>(
                         valueListenable: controller.historyNotifier,
@@ -115,7 +110,7 @@ class HomeView extends StatelessWidget {
                             return const Center(child: Text("No history yet", style: TextStyle(fontFamily: 'Outfit')));
                           }
                           return ListView.separated(
-                            controller: scrollController, // WAJIB: Hubungkan dengan scrollController builder
+                            controller: scrollController,
                             padding: const EdgeInsets.all(24),
                             itemCount: tickets.length,
                             separatorBuilder: (context, index) => const SizedBox(height: 12),
