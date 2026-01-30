@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:typed_data';
 
 class GenerateQrView extends StatefulWidget {
@@ -19,7 +19,7 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   Future<void> _saveQrCode() async {
   await screenshotController.capture().then((Uint8List? image) async {
     if (image != null) {
-      final result = await ImageGallerySaver.saveImage(image);
+      // final result = await ImageGallerySaver.saveImage(image);
 
       if (!mounted) return; 
 
