@@ -39,30 +39,62 @@ class HomeView extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
-                          onPressed: () => Navigator.pushNamed(context, '/settings'),
-                          icon: const Icon(Icons.settings_outlined, color: Color(0xFF43A078), size: 28),
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/settings'),
+                          icon: const Icon(
+                            Icons.settings_outlined,
+                            color: Color(0xFF43A078),
+                            size: 28,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 30),
-                  const Text('Hai User 👋', style: TextStyle(fontFamily: 'Outfit', fontSize: 16, color: Colors.grey)),
+                  const Text(
+                    'Hai User 👋',
+                    style: TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
                   const SizedBox(height: 20),
 
                   // Menu Grid
                   Row(
                     children: [
-                      _buildMenuCard(title: 'Generate QR', subtitle: 'Create QR fast', icon: Icons.qr_code_2, onTap: () => Navigator.pushNamed(context, '/generate')),
+                      _buildMenuCard(
+                        title: 'Generate QR',
+                        subtitle: 'Create QR fast',
+                        icon: Icons.qr_code_2,
+                        onTap: () => Navigator.pushNamed(context, '/generate'),
+                      ),
                       const SizedBox(width: 16),
-                      _buildMenuCard(title: 'Scan Qr', subtitle: 'Scan any ticket', icon: Icons.qr_code_scanner, onTap: () => controller.goToQRCodeView(context)),
+                      _buildMenuCard(
+                        title: 'Scan Qr',
+                        subtitle: 'Scan any ticket',
+                        icon: Icons.qr_code_scanner,
+                        onTap: () => controller.goToQRCodeView(context),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      _buildMenuCard(title: 'Send', subtitle: 'Send to mail', icon: Icons.mail_outline, onTap: () {}),
+                      _buildMenuCard(
+                        title: 'Send',
+                        subtitle: 'Send to mail',
+                        icon: Icons.mail_outline,
+                        onTap: () {},
+                      ),
                       const SizedBox(width: 16),
-                      _buildMenuCard(title: 'Print', subtitle: 'Print ticket', icon: Icons.print_outlined, onTap: () {}),
+                      _buildMenuCard(
+                        title: 'Print',
+                        subtitle: 'Print ticket',
+                        icon: Icons.print_outlined,
+                        onTap: () {},
+                      ),
                     ],
                   ),
                 ],
@@ -72,9 +104,9 @@ class HomeView extends StatelessWidget {
 
           // 2. FITUR HISTORY SLIDE UP (Buka-Tutup)
           DraggableScrollableSheet(
-            initialChildSize: 0.12, 
-            minChildSize: 0.12,    
-            maxChildSize: 0.9,      
+            initialChildSize: 0.12,
+            minChildSize: 0.12,
+            maxChildSize: 0.9,
             builder: (context, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
@@ -88,7 +120,10 @@ class HomeView extends StatelessWidget {
                     Container(
                       width: 40,
                       height: 5,
-                      decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     const Row(
@@ -97,23 +132,36 @@ class HomeView extends StatelessWidget {
                         Icon(Icons.keyboard_arrow_up, color: Color(0xFF43A078)),
                         Text(
                           ' Recent History',
-                          style: TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.bold, color: Color(0xFF43A078)),
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF43A078),
+                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Expanded(
                       child: ValueListenableBuilder<List<TicketModel>>(
-                        valueListenable: controller.historyNotifier,
+                        valueListenable: HomeController.historyNotifier,
                         builder: (context, tickets, _) {
                           if (tickets.isEmpty) {
-                            return const Center(child: Text("No history yet", style: TextStyle(fontFamily: 'Outfit')));
+                            return const Center(
+                              child: Text(
+                                "No history yet",
+                                style: TextStyle(fontFamily: 'Outfit'),
+                              ),
+                            );
                           }
                           return ListView.separated(
-                            controller: scrollController,
+                            controller:
+                                scrollController, 
+                            physics:
+                                const BouncingScrollPhysics(),
                             padding: const EdgeInsets.all(24),
                             itemCount: tickets.length,
-                            separatorBuilder: (context, index) => const SizedBox(height: 12),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 12),
                             itemBuilder: (context, index) {
                               return HistoryCard(ticket: tickets[index]);
                             },
@@ -132,19 +180,45 @@ class HomeView extends StatelessWidget {
   }
 
   // Fungsi _buildMenuCard tetap sama...
-  Widget _buildMenuCard({required String title, required String subtitle, required IconData icon, required VoidCallback onTap}) {
+  Widget _buildMenuCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+          ),
           child: Column(
             children: [
-              CircleAvatar(radius: 35, backgroundColor: const Color(0xFF43A078), child: Icon(icon, color: Colors.white, size: 35)),
+              CircleAvatar(
+                radius: 35,
+                backgroundColor: const Color(0xFF43A078),
+                child: Icon(icon, color: Colors.white, size: 35),
+              ),
               const SizedBox(height: 12),
-              Text(title, style: const TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.bold, fontSize: 16)),
-              Text(subtitle, style: const TextStyle(fontFamily: 'Outfit', color: Colors.grey, fontSize: 12)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'Outfit',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontFamily: 'Outfit',
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+              ),
             ],
           ),
         ),

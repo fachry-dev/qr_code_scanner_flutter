@@ -3,19 +3,36 @@ import 'package:qr_scanner/qr_code/qr_code_view.dart';
 import 'package:qr_scanner/features/history/models/ticket_model.dart'; //
 
 class HomeController {
-  final ValueNotifier<List<TicketModel>> historyNotifier = ValueNotifier<List<TicketModel>>([
-    TicketModel(id: '1', name: 'FACHRY WARDANA', studentClass: 'XI PPLG', isRedeemed: false),
-    TicketModel(id: '2', name: 'RIZQI NOVILLA', studentClass: 'XI TRKJ', isRedeemed: true),
-  ]);
-
-  void addTicketToHistory(String name, String studentClass, bool status) {
+  static final ValueNotifier<List<TicketModel>> historyNotifier =
+      ValueNotifier<List<TicketModel>>([]);
+  final HomeController homeController = HomeController();
+  void addTicketToHistory(
+    String name,
+    String studentClass, {
+    bool status = false,
+  }) {
     final newTicket = TicketModel(
       id: DateTime.now().toString(),
       name: name,
       studentClass: studentClass,
       isRedeemed: status,
     );
-    historyNotifier.value = [newTicket, ...historyNotifier.value];
+    historyNotifier.value = [newTicket, ...historyNotifier.value];  }
+
+  void markAsRedeemed(String name) {
+    List<TicketModel> currentHistory = List.from(historyNotifier.value);
+
+    for (int i = 0; i < currentHistory.length; i++) {
+      if (currentHistory[i].name == name) {
+        currentHistory[i] = TicketModel(
+          id: currentHistory[i].id,
+          name: currentHistory[i].name,
+          studentClass: currentHistory[i].studentClass,
+          isRedeemed: true,
+        );
+      }
+    }
+    historyNotifier.value = currentHistory;
   }
 
   void goToQRCodeView(BuildContext context) {

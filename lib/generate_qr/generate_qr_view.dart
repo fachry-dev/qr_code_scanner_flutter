@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:qr_scanner/home/home_controller.dart';
 // import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:typed_data';
 
@@ -15,20 +16,21 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   final ScreenshotController screenshotController = ScreenshotController();
   final TextEditingController textController = TextEditingController();
   String qrData = "";
+  final HomeController _homeController = HomeController();
 
   Future<void> _saveQrCode() async {
-  await screenshotController.capture().then((Uint8List? image) async {
-    if (image != null) {
-      // final result = await ImageGallerySaver.saveImage(image);
+    await screenshotController.capture().then((Uint8List? image) async {
+      if (image != null) {
+        // final result = await ImageGallerySaver.saveImage(image);
 
-      if (!mounted) return; 
+        if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("QR Code disimpan ke Galeri!")),
-      );
-    }
-  });
-}
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("QR Code disimpan ke Galeri!")),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +43,37 @@ class _GenerateQrViewState extends State<GenerateQrView> {
           children: [
             TextField(
               controller: textController,
-              decoration: InputDecoration(hintText: "Masukkan data tiket"),
+              decoration: const InputDecoration(
+                hintText: "Masukkan data tiket",
+              ),
               onChanged: (val) => setState(() => qrData = val),
             ),
+
             const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                if (textController.text.isNotEmpty) {
+                  _homeController.addTicketToHistory(
+                    textController.text,
+                    "XI PPLG",
+                    status: false, // Tambahkan parameter ini
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Tiket tersimpan di History (Belum di-scan)",
+                      ),
+                    ),
+                  );
+
+                  setState(() {});
+                }
+              },
+              child: const Text("Generate & Simpan ke History"),
+            ),
+            const SizedBox(height: 30),
+
             if (qrData.isNotEmpty) ...[
               Screenshot(
                 controller: screenshotController,
@@ -68,7 +97,7 @@ class _GenerateQrViewState extends State<GenerateQrView> {
                   foregroundColor: Colors.white,
                 ),
               ),
-            ]
+            ],
           ],
         ),
       ),

@@ -7,6 +7,7 @@ class QrCodeController {
   final QrCodeService service = QrCodeService();
   final ImagePicker _picker = ImagePicker();
   final BarcodeScanner _barcodeScanner = BarcodeScanner();
+  
 
   Future<void> scanFromGallery() async {
     try {
