@@ -21,8 +21,6 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   Future<void> _saveQrCode() async {
     await screenshotController.capture().then((Uint8List? image) async {
       if (image != null) {
-        // final result = await ImageGallerySaver.saveImage(image);
-
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(

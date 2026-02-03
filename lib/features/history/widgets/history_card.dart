@@ -8,8 +8,8 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color mainColor = ticket.isRedeemed ? const Color(0xFF43A078) : Colors.red;
-    final Color bgColor = ticket.isRedeemed ? const Color(0xFFE8F5E9) : const Color(0xFFFFEBEE);
+    final Color statusColor = ticket.isRedeemed ? const Color(0xFF43A078) : Colors.red;
+    final String statusText = ticket.isRedeemed ? 'REDEEMED' : 'UNREDEEMED';
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -20,7 +20,7 @@ class HistoryCard extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: mainColor,
+            backgroundColor: statusColor,
             child: const Icon(Icons.qr_code, color: Colors.white, size: 20),
           ),
           const SizedBox(width: 12),
@@ -31,14 +31,14 @@ class HistoryCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: bgColor,
+                    color: statusColor.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    ticket.isRedeemed ? 'REDEEMED' : 'UNREDEEMED',
+                    statusText,
                     style: TextStyle(
                       fontFamily: 'Outfit',
-                      color: mainColor,
+                      color: statusColor,
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
@@ -52,7 +52,7 @@ class HistoryCard extends StatelessWidget {
                     fontFamily: 'Outfit',
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
-                    color: mainColor,
+                    color: statusColor,
                   ),
                 ),
                 Text(
@@ -66,7 +66,7 @@ class HistoryCard extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.chevron_right, color: mainColor),
+          Icon(Icons.chevron_right, color: statusColor),
         ],
       ),
     );

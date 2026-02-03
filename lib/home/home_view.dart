@@ -61,7 +61,6 @@ class HomeView extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Menu Grid
                   Row(
                     children: [
                       _buildMenuCard(
@@ -112,7 +111,6 @@ class HomeView extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
                 ),
                 child: Column(
                   children: [
@@ -126,24 +124,22 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.keyboard_arrow_up, color: Color(0xFF43A078)),
-                        Text(
-                          ' Recent History',
-                          style: TextStyle(
-                            fontFamily: 'Outfit',
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF43A078),
-                          ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Text(
+                        'Recent History',
+                        style: TextStyle(
+                          fontFamily: 'Outfit',
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF43A078),
                         ),
-                      ],
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Expanded(
                       child: ValueListenableBuilder<List<TicketModel>>(
-                        valueListenable: HomeController.historyNotifier,
+                        valueListenable: HomeController
+                            .historyNotifier, // Mengacu ke static notifier
                         builder: (context, tickets, _) {
                           if (tickets.isEmpty) {
                             return const Center(
@@ -154,11 +150,12 @@ class HomeView extends StatelessWidget {
                             );
                           }
                           return ListView.separated(
-                            controller:
-                                scrollController, 
-                            physics:
-                                const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.all(24),
+                            controller: scrollController,
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 10,
+                            ),
                             itemCount: tickets.length,
                             separatorBuilder: (context, index) =>
                                 const SizedBox(height: 12),
@@ -179,7 +176,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // Fungsi _buildMenuCard tetap sama...
   Widget _buildMenuCard({
     required String title,
     required String subtitle,
