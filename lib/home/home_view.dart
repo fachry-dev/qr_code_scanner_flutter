@@ -107,7 +107,7 @@ class HomeView extends StatelessWidget {
             ),
           ),
 
-          _buildHistorySheet(),
+          // _buildHistorySheet(),
 
           DraggableScrollableSheet(
             initialChildSize: 0.12,
@@ -130,7 +130,7 @@ class HomeView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Text(
@@ -229,7 +229,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildHistorySheet() {
-    return const SizedBox.shrink();
-  }
+  // Widget _buildHistorySheet() {
+  //   return const SizedBox.shrink();
+  // }
 }
