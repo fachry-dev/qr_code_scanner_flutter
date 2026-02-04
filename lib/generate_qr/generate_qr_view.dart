@@ -22,19 +22,25 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   Future<void> _saveQrCode() async {
     await screenshotController.capture().then((Uint8List? image) async {
       if (image != null) {
-        await Gal.putImageBytes(image);
-
-        if (textController.text.isNotEmpty) {
-          _homeController.addTicketToHistory(
-            textController.text,
-            "XI PPLG",
-            status: false,
+        try {
+          await Gal.putImageBytes(
+            image,
+            name: "ScanGo_${DateTime.now().millisecondsSinceEpoch}",
           );
+          if (textController.text.isNotEmpty) {
+            _homeController.addTicketToHistory(
+              textController.text,
+              "XI PPLG",
+              status: false,
+            );
+          }
+
+          if (!mounted) return;
+
+          _showSuccessDialog(context);
+        } catch (e) {
+          debugPrint("Gagal menyimpan: $e");
         }
-
-        if (!mounted) return;
-
-        _showSuccessDialog(context);
       }
     });
   }

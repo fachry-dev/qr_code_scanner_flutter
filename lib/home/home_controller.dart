@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_scanner/qr_code/qr_code_view.dart';
-import 'package:qr_scanner/features/history/models/ticket_model.dart'; //
+import 'package:qr_scanner/features/history/models/ticket_model.dart';
 
 class HomeController {
   static final ValueNotifier<List<TicketModel>> historyNotifier =

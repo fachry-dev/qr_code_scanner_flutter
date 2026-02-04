@@ -12,7 +12,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Berpindah ke home setelah 3 detik
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/home');
@@ -28,7 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Gunakan logo QR yang kamu miliki
             const Icon(
               Icons.qr_code_scanner, 
               size: 100, 
