@@ -34,8 +34,6 @@ class QrCodeView extends StatelessWidget {
       body: Stack(
         children: [
           MobileScanner(onDetect: (capture) => controller.scanQRCode(capture)),
-
-          // Layer Overlay
           ColorFiltered(
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.5),
@@ -82,7 +80,6 @@ class QrCodeView extends StatelessWidget {
             ),
           ),
 
-          // Layer UI
           Column(
             children: [
               const SizedBox(height: 100),

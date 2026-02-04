@@ -110,70 +110,54 @@ class HomeView extends StatelessWidget {
           _buildHistorySheet(),
 
           DraggableScrollableSheet(
-            initialChildSize: 0.12,
-            minChildSize: 0.12,
-            maxChildSize: 0.9,
+            initialChildSize: 0.1,
+            minChildSize: 0.05,
+            maxChildSize: 1.0,
+            snap: true,
             builder: (context, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
-                    Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
-                        'Recent History',
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF43A078),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: ValueListenableBuilder<List<TicketModel>>(
-                        valueListenable: HomeController
-                            .historyNotifier, // Mengacu ke static notifier
-                        builder: (context, tickets, _) {
-                          if (tickets.isEmpty) {
-                            return const Center(
-                              child: Text(
-                                "No history yet",
-                                style: TextStyle(fontFamily: 'Outfit'),
-                              ),
-                            );
-                          }
-                          return ListView.separated(
-                            controller: scrollController,
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 10,
-                            ),
-                            itemCount: tickets.length,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 12),
-                            itemBuilder: (context, index) {
-                              return HistoryCard(ticket: tickets[index]);
-                            },
-                          );
-                        },
-                      ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      spreadRadius: 2,
                     ),
                   ],
+                ),
+                child: DefaultTabController(
+                  length: 2,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      _buildHandleBar(),
+
+                      const TabBar(
+                        labelColor: Color(0xFF43A078),
+                        indicatorColor: Color(0xFF43A078),
+                        tabs: [
+                          Tab(text: "Unredeemed"),
+                          Tab(text: "Redeemed"),
+                        ],
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            _buildHistoryList(
+                              scrollController,
+                              filterRedeemed: false,
+                            ),
+                            _buildHistoryList(
+                              scrollController,
+                              filterRedeemed: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -226,6 +210,50 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHandleBar() {
+    return Container(
+      width: 60,
+      height: 5,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
+  Widget _buildHistoryList(
+    ScrollController scrollController, {
+    required bool filterRedeemed,
+  }) {
+    return ValueListenableBuilder<List<TicketModel>>(
+      valueListenable: HomeController.historyNotifier,
+      builder: (context, allTickets, _) {
+        final tickets = allTickets
+            .where((t) => t.isRedeemed == filterRedeemed)
+            .toList();
+
+        if (tickets.isEmpty) {
+          return const Center(
+            child: Text(
+              "Belum ada data",
+              style: TextStyle(fontFamily: 'Outfit', color: Colors.grey),
+            ),
+          );
+        }
+
+        return ListView.separated(
+          controller: scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          itemCount: tickets.length,
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
+          itemBuilder: (context, index) {
+            return HistoryCard(ticket: tickets[index]);
+          },
+        );
+      },
     );
   }
 

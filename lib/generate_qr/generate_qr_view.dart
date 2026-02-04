@@ -20,29 +20,43 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   String qrData = "";
 
   Future<void> _saveQrCode() async {
-    await screenshotController.capture().then((Uint8List? image) async {
-      if (image != null) {
-        try {
-          await Gal.putImageBytes(
-            image,
-            name: "ScanGo_${DateTime.now().millisecondsSinceEpoch}",
-          );
-          if (textController.text.isNotEmpty) {
-            _homeController.addTicketToHistory(
-              textController.text,
-              "XI PPLG",
-              status: false,
+    bool hasAccess = await Gal.hasAccess();
+
+    if (!hasAccess) {
+      hasAccess = await Gal.requestAccess();
+    }
+    if (hasAccess) {
+      await screenshotController.capture().then((Uint8List? image) async {
+        if (image != null) {
+          try {
+            await Gal.putImageBytes(
+              image,
+              name: "ScanGo_${DateTime.now().millisecondsSinceEpoch}",
             );
+
+            if (textController.text.isNotEmpty) {
+              _homeController.addTicketToHistory(
+                textController.text,
+                "XI PPLG",
+                status: false,
+              );
+            }
+
+            if (!mounted) return;
+            _showSuccessDialog(context);
+          } catch (e) {
+            debugPrint("Gagal menyimpan: $e");
           }
-
-          if (!mounted) return;
-
-          _showSuccessDialog(context);
-        } catch (e) {
-          debugPrint("Gagal menyimpan: $e");
         }
-      }
-    });
+      });
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Izin Galeri Ditolak. Mohon aktifkan di Settings"),
+        ),
+      );
+    }
   }
 
   void _showSuccessDialog(BuildContext context) {
