@@ -15,93 +15,100 @@ class HomeView extends StatelessWidget {
       body: Stack(
         children: [
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'ScanGo',
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF43A078),
-                        ),
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: IconButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, '/settings'),
-                          icon: const Icon(
-                            Icons.settings_outlined,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'ScanGo',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
                             color: Color(0xFF43A078),
-                            size: 28,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    'Hai User 👋',
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontSize: 16,
-                      color: Colors.grey,
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/settings'),
+                            icon: const Icon(
+                              Icons.settings_outlined,
+                              color: Color(0xFF43A078),
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Hai User 👋',
+                      style: TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
 
-                  Row(
-                    children: [
-                      _buildMenuCard(
-                        title: 'Generate QR',
-                        subtitle: 'Create QR fast',
-                        icon: Icons.qr_code_2,
-                        onTap: () => Navigator.pushNamed(context, '/generate'),
-                      ),
-                      const SizedBox(width: 16),
-                      _buildMenuCard(
-                        title: 'Scan Qr',
-                        subtitle: 'Scan any ticket',
-                        icon: Icons.qr_code_scanner,
-                        onTap: () => controller.goToQRCodeView(context),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      _buildMenuCard(
-                        title: 'Send',
-                        subtitle: 'Send to mail',
-                        icon: Icons.mail_outline,
-                        onTap: () {},
-                      ),
-                      const SizedBox(width: 16),
-                      _buildMenuCard(
-                        title: 'Print',
-                        subtitle: 'Print ticket',
-                        icon: Icons.print_outlined,
-                        onTap: () {},
-                      ),
-                    ],
-                  ),
-                ],
+                    Row(
+                      children: [
+                        _buildMenuCard(
+                          title: 'Generate QR',
+                          subtitle: 'Create QR fast',
+                          icon: Icons.qr_code_2,
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/generate'),
+                        ),
+                        const SizedBox(width: 16),
+                        _buildMenuCard(
+                          title: 'Scan Qr',
+                          subtitle: 'Scan any ticket',
+                          icon: Icons.qr_code_scanner,
+                          onTap: () => controller.goToQRCodeView(context),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    Row(
+                      children: [
+                        _buildMenuCard(
+                          title: 'Send',
+                          subtitle: 'Send to mail',
+                          icon: Icons.mail_outline,
+                          onTap: () => controller.goToQRCodeView(context),
+                        ),
+                        const SizedBox(width: 16),
+                        _buildMenuCard(
+                          title: 'Print',
+                          subtitle: 'Print ticket',
+                          icon: Icons.print_outlined,
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 90),
+                  ],
+                ),
               ),
             ),
           ),
 
-          // 2. FITUR HISTORY SLIDE UP (Buka-Tutup)
+          _buildHistorySheet(),
+
           DraggableScrollableSheet(
             initialChildSize: 0.12,
             minChildSize: 0.12,
@@ -220,5 +227,9 @@ class HomeView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildHistorySheet() {
+    return const SizedBox.shrink();
   }
 }

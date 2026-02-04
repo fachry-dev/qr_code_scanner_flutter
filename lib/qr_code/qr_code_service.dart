@@ -25,5 +25,13 @@ class QrCodeService {
     await _dio.post('/api/cancel', data: {'ticket_id': ticketId});
   }
 
+  Future<void> addTicket(String name) async {
+    await _dio.post('/api/tickets', data: {'name': name});
+  }
+
+  Future<void> deleteTicket(String id) async {
+    await _dio.delete('/api/tickets', queryParameters: {'id': id});
+  }
+
 
 }

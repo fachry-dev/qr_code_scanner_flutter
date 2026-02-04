@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gal/gal.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:qr_scanner/home/home_controller.dart';
-// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:typed_data';
 
 class GenerateQrView extends StatefulWidget {
@@ -14,20 +14,78 @@ class GenerateQrView extends StatefulWidget {
 
 class _GenerateQrViewState extends State<GenerateQrView> {
   final ScreenshotController screenshotController = ScreenshotController();
-  final TextEditingController textController = TextEditingController();
-  String qrData = "";
   final HomeController _homeController = HomeController();
+  final TextEditingController textController = TextEditingController();
+
+  String qrData = "";
 
   Future<void> _saveQrCode() async {
     await screenshotController.capture().then((Uint8List? image) async {
       if (image != null) {
+        await Gal.putImageBytes(image);
+
+        if (textController.text.isNotEmpty) {
+          _homeController.addTicketToHistory(
+            textController.text,
+            "XI PPLG",
+            status: false,
+          );
+        }
+
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("QR Code disimpan ke Galeri!")),
-        );
+        _showSuccessDialog(context);
       }
     });
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Column(
+            children: [
+              Icon(Icons.check_circle, color: Color(0xFF43A078), size: 60),
+              SizedBox(height: 10),
+              Text(
+                "Download Berhasil",
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            "QR Code telah disimpan ke galeri ponsel Anda dan ditambahkan ke riwayat.",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontFamily: 'Outfit'),
+          ),
+          actions: [
+            Center(
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF43A078),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  "Oke",
+                  style: TextStyle(color: Colors.white, fontFamily: 'Outfit'),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -48,28 +106,28 @@ class _GenerateQrViewState extends State<GenerateQrView> {
             ),
 
             const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                if (textController.text.isNotEmpty) {
-                  _homeController.addTicketToHistory(
-                    textController.text,
-                    "XI PPLG",
-                    status: false, // Tambahkan parameter ini
-                  );
+            // ElevatedButton(
+            //   onPressed: () {
+            //     if (textController.text.isNotEmpty) {
+            //       _homeController.addTicketToHistory(
+            //         textController.text,
+            //         "XI PPLG",
+            //         status: false,
+            //       );
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Tiket tersimpan di History (Belum di-scan)",
-                      ),
-                    ),
-                  );
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         const SnackBar(
+            //           content: Text(
+            //             "Tiket tersimpan di History (Belum di-scan)",
+            //           ),
+            //         ),
+            //       );
 
-                  setState(() {});
-                }
-              },
-              child: const Text("Generate & Simpan ke History"),
-            ),
+            //       setState(() {});
+            //     }
+            //   },
+            //   child: const Text("Generate & Simpan ke History"),
+            // ),
             const SizedBox(height: 30),
 
             if (qrData.isNotEmpty) ...[
