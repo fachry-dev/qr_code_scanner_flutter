@@ -64,7 +64,6 @@ class QrCodeView extends StatelessWidget {
             ),
           ),
 
-          // --- TOMBOL GALERI KECIL (SUDAH ADA) ---
           Positioned(
             top: 20,
             right: 20,
@@ -99,7 +98,6 @@ class QrCodeView extends StatelessWidget {
               ),
               const Spacer(),
               
-              // Horizontal History Cards (Opsional, tetap ada agar user bisa melihat status)
               Container(
                 height: 110,
                 padding: const EdgeInsets.only(bottom: 10),
@@ -123,14 +121,12 @@ class QrCodeView extends StatelessWidget {
                 ),
               ),
 
-              // --- TOMBOL UTAMA DIPERBARUI: HANYA SCAN QR ---
               Padding(
                 padding: const EdgeInsets.fromLTRB(40, 0, 40, 50),
                 child: SizedBox(
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton.icon(
-                    // Tombol ini sekarang hanya untuk memicu fokus kamera/instruksi scan
                     onPressed: () {}, 
                     icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
                     label: const Text(

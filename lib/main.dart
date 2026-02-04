@@ -26,8 +26,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/home': (context) => HomeView(),
-        // Tambahkan rute lain jika sudah ada pagenya
-        // '/settings': (context) => const SettingView(),
         '/generate': (context) => const GenerateQrView(),
       },
     );
