@@ -4,6 +4,7 @@ import 'package:qr_scanner/qr_code/qr_code_controller.dart';
 import 'package:qr_scanner/home/home_controller.dart';
 import 'package:gal/gal.dart';
 import 'package:qr_scanner/features/history/widgets/history_card.dart';
+import 'dart:developer';
 
 class QrCodeView extends StatelessWidget {
   final QrCodeController controller = QrCodeController();
@@ -70,11 +71,18 @@ class QrCodeView extends StatelessWidget {
                 color: Colors.white.withOpacity(0.9),
                 shape: BoxShape.circle,
                 boxShadow: [
-                  BoxShadow(color: Colors.black12, blurRadius: 4, spreadRadius: 1)
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    spreadRadius: 1,
+                  ),
                 ],
               ),
               child: IconButton(
-                icon: const Icon(Icons.image_outlined, color: Color(0xFF43A078)),
+                icon: const Icon(
+                  Icons.image_outlined,
+                  color: Color(0xFF43A078),
+                ),
                 onPressed: () => controller.scanFromGallery(),
               ),
             ),
@@ -94,7 +102,7 @@ class QrCodeView extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              
+
               Container(
                 height: 110,
                 padding: const EdgeInsets.only(bottom: 10),
@@ -110,7 +118,14 @@ class QrCodeView extends StatelessWidget {
                         return Container(
                           width: 280,
                           margin: const EdgeInsets.only(right: 12),
-                          child: HistoryCard(ticket: tickets[index]),
+                          child: HistoryCard(
+                            ticket: tickets[index],
+                            onTap: () {
+                              debugPrint(
+                                "Melihat detail tiket: ${tickets[index].name}",
+                              );
+                            },
+                          ),
                         );
                       },
                     );
@@ -124,8 +139,11 @@ class QrCodeView extends StatelessWidget {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton.icon(
-                    onPressed: () {}, 
-                    icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.qr_code_scanner,
+                      color: Colors.white,
+                    ),
                     label: const Text(
                       'Scan QR Code',
                       style: TextStyle(

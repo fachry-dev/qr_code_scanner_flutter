@@ -110,8 +110,8 @@ class HomeView extends StatelessWidget {
           _buildHistorySheet(),
 
           DraggableScrollableSheet(
-            initialChildSize: 0.1,
-            minChildSize: 0.05,
+            initialChildSize: 0.15,
+            minChildSize: 0.15,
             maxChildSize: 1.0,
             snap: true,
             builder: (context, scrollController) {
@@ -147,11 +147,11 @@ class HomeView extends StatelessWidget {
                           children: [
                             _buildHistoryList(
                               scrollController,
-                              filterRedeemed: false,
+                              isRedeemed: false,
                             ),
                             _buildHistoryList(
                               scrollController,
-                              filterRedeemed: true,
+                              isRedeemed: true,
                             ),
                           ],
                         ),
@@ -226,34 +226,72 @@ class HomeView extends StatelessWidget {
 
   Widget _buildHistoryList(
     ScrollController scrollController, {
-    required bool filterRedeemed,
+    required bool isRedeemed,
   }) {
     return ValueListenableBuilder<List<TicketModel>>(
       valueListenable: HomeController.historyNotifier,
       builder: (context, allTickets, _) {
-        final tickets = allTickets
-            .where((t) => t.isRedeemed == filterRedeemed)
+        final filtered = allTickets
+            .where((t) => t.isRedeemed == isRedeemed)
             .toList();
 
-        if (tickets.isEmpty) {
-          return const Center(
-            child: Text(
-              "Belum ada data",
-              style: TextStyle(fontFamily: 'Outfit', color: Colors.grey),
-            ),
+        if (filtered.isEmpty) {
+          return ListView(
+            controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: const [
+              SizedBox(height: 50),
+              Center(child: Text("Belum ada tiket")),
+            ],
           );
         }
 
         return ListView.separated(
-          controller: scrollController,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          itemCount: tickets.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
+        controller: scrollController, 
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(20),
+        itemCount: filtered.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 10),
           itemBuilder: (context, index) {
-            return HistoryCard(ticket: tickets[index]);
+            final ticket = filtered[index];
+            return HistoryCard(
+              ticket: ticket,
+              onTap: () => _showTicketDetail(context, ticket),
+            );
           },
         );
       },
+    );
+  }
+
+  void _showTicketDetail(BuildContext context, TicketModel ticket) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(25),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Informasi Tiket",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const Divider(),
+            Text("Nama: ${ticket.name}"),
+            Text("ID Tiket: ${ticket.id}"),
+            if (ticket.isRedeemed && ticket.scannedAt != null)
+              Text(
+                "Waktu Scan: ${ticket.scannedAt.toString().substring(0, 16)} WIB",
+              ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
     );
   }
 
