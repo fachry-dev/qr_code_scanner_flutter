@@ -112,20 +112,13 @@ class HomeView extends StatelessWidget {
           DraggableScrollableSheet(
             initialChildSize: 0.15,
             minChildSize: 0.15,
-            maxChildSize: 1.0,
+            maxChildSize: 1.0, 
             snap: true,
             builder: (context, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    ),
-                  ],
                 ),
                 child: DefaultTabController(
                   length: 2,
@@ -133,7 +126,6 @@ class HomeView extends StatelessWidget {
                     children: [
                       const SizedBox(height: 12),
                       _buildHandleBar(),
-
                       const TabBar(
                         labelColor: Color(0xFF43A078),
                         indicatorColor: Color(0xFF43A078),
@@ -231,11 +223,11 @@ class HomeView extends StatelessWidget {
     return ValueListenableBuilder<List<TicketModel>>(
       valueListenable: HomeController.historyNotifier,
       builder: (context, allTickets, _) {
-        final filtered = allTickets
+        final filteredTickets = allTickets
             .where((t) => t.isRedeemed == isRedeemed)
             .toList();
 
-        if (filtered.isEmpty) {
+        if (filteredTickets.isEmpty) {
           return ListView(
             controller: scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
@@ -247,13 +239,13 @@ class HomeView extends StatelessWidget {
         }
 
         return ListView.separated(
-        controller: scrollController, 
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(20),
-        itemCount: filtered.length,
+          controller: scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(20),
+          itemCount: filteredTickets.length,
           separatorBuilder: (_, __) => const SizedBox(height: 10),
           itemBuilder: (context, index) {
-            final ticket = filtered[index];
+            final ticket = filteredTickets[index];
             return HistoryCard(
               ticket: ticket,
               onTap: () => _showTicketDetail(context, ticket),

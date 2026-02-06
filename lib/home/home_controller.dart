@@ -27,13 +27,14 @@ class HomeController {
   }
 
   void markAsRedeemed(String ticketId) {
-    final List<TicketModel> currentHistory = List.from(historyNotifier.value);
+    final List<TicketModel> currentHistory = List<TicketModel>.from(
+      historyNotifier.value,
+    );
     int index = currentHistory.indexWhere((t) => t.id == ticketId);
 
     if (index != -1) {
       currentHistory[index].isRedeemed = true;
       currentHistory[index].scannedAt = DateTime.now();
-
       historyNotifier.value = currentHistory;
     }
   }

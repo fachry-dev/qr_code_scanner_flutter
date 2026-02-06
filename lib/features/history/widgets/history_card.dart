@@ -3,22 +3,20 @@ import '../models/ticket_model.dart';
 import 'package:qr_scanner/home/home_controller.dart';
 
 class HistoryCard extends StatelessWidget {
-  final dynamic ticket; 
+  final dynamic ticket;
   final VoidCallback onTap;
 
-  const HistoryCard({
-    super.key,
-    required this.ticket,
-    required this.onTap,
-  });
+  const HistoryCard({super.key, required this.ticket, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final bool isRedeemed = ticket.isRedeemed;
-    final Color statusColor = isRedeemed ? const Color(0xFF43A078) : Colors.redAccent;
+    final Color statusColor = isRedeemed
+        ? const Color(0xFF43A078)
+        : Colors.redAccent;
 
     return InkWell(
-      onTap: onTap, 
+      onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
