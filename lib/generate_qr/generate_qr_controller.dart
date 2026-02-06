@@ -6,7 +6,7 @@ import 'package:qr_scanner/home/home_controller.dart';
 class QrCodeController {
   final ImagePicker _picker = ImagePicker();
   final BarcodeScanner _barcodeScanner = BarcodeScanner();
-  
+
   final HomeController _homeController = HomeController();
 
   Future<void> scanFromGallery() async {
@@ -14,7 +14,9 @@ class QrCodeController {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         final inputImage = InputImage.fromFilePath(image.path);
-        final List<Barcode> barcodes = await _barcodeScanner.processImage(inputImage);
+        final List<Barcode> barcodes = await _barcodeScanner.processImage(
+          inputImage,
+        );
 
         if (barcodes.isNotEmpty) {
           final String? qrData = barcodes.first.rawValue;
@@ -33,8 +35,8 @@ class QrCodeController {
     final List<dynamic> barcodes = capture.barcodes;
     for (final barcode in barcodes) {
       if (barcode.rawValue != null) {
-        _homeController.markAsRedeemed(barcode.rawValue!);
-        break; 
+        HomeController.instance.markAsRedeemed(barcode.rawValue!);
+        break;
       }
     }
   }

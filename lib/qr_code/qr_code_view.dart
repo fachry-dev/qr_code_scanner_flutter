@@ -106,23 +106,26 @@ class QrCodeView extends StatelessWidget {
               Container(
                 height: 110,
                 padding: const EdgeInsets.only(bottom: 10),
-                child: ValueListenableBuilder(
+                child: ValueListenableBuilder<List<TicketModel>>(
                   valueListenable: HomeController.historyNotifier,
                   builder: (context, tickets, _) {
-                    if (tickets.isEmpty) return const SizedBox();
+                    final unredeemedOnly = tickets
+                        .where((t) => !t.isRedeemed)
+                        .toList();
+                    if (unredeemedOnly.isEmpty) return const SizedBox();
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 24),
-                      itemCount: tickets.length,
+                      itemCount: unredeemedOnly.length,
                       itemBuilder: (context, index) {
                         return Container(
                           width: 280,
                           margin: const EdgeInsets.only(right: 12),
                           child: HistoryCard(
-                            ticket: tickets[index],
+                            ticket: unredeemedOnly[index],
                             onTap: () {
                               debugPrint(
-                                "Melihat detail tiket: ${tickets[index].name}",
+                                "Detail tiket: ${unredeemedOnly[index].name}",
                               );
                             },
                           ),

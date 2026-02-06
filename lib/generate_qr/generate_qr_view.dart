@@ -16,15 +16,21 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   final ScreenshotController screenshotController = ScreenshotController();
   final HomeController _homeController = HomeController();
   final TextEditingController textController = TextEditingController();
+  // final String generatedId = DateTime.now().millisecondsSinceEpoch.toString();
+  final unredeemedOnly = tickets.where((t) => !t.isRedeemed).toList();
 
   String qrData = "";
 
   Future<void> _saveQrCode() async {
     bool hasAccess = await Gal.hasAccess();
+    if (!hasAccess) hasAccess = await Gal.requestAccess();
 
     if (!hasAccess) {
       hasAccess = await Gal.requestAccess();
+      final String generatedId = DateTime.now().millisecondsSinceEpoch.toString();
+      generatedId;
     }
+    
     if (hasAccess) {
       await screenshotController.capture().then((Uint8List? image) async {
         if (image != null) {
@@ -34,13 +40,14 @@ class _GenerateQrViewState extends State<GenerateQrView> {
               name: "ScanGo_${DateTime.now().millisecondsSinceEpoch}",
             );
 
-            if (textController.text.isNotEmpty) {
-              _homeController.addTicketToHistory(
-                textController.text,
-                "XI PPLG",
-                status: false,
-              );
-            }
+           if (textController.text.isNotEmpty) {
+            _homeController.addTicketToHistory(
+              textController.text, 
+              "XI PPLG",          
+              id: generatedId,     
+              status: false,
+            );
+          }
 
             if (!mounted) return;
             _showSuccessDialog(context);
