@@ -112,7 +112,7 @@ class HomeView extends StatelessWidget {
           DraggableScrollableSheet(
             initialChildSize: 0.15,
             minChildSize: 0.15,
-            maxChildSize: 1.0, 
+            maxChildSize: 1.0,
             snap: true,
             builder: (context, scrollController) {
               return Container(

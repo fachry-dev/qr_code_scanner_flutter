@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/ticket_model.dart';
-import 'package:qr_scanner/home/home_controller.dart';
+// import '../models/ticket_model.dart';
+// import 'package:qr_scanner/home/home_controller.dart';
 
 class HistoryCard extends StatelessWidget {
   final dynamic ticket;

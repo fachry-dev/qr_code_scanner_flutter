@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner/qr_code/qr_code_controller.dart';
 import 'package:qr_scanner/home/home_controller.dart';
-import 'package:gal/gal.dart';
+// import 'package:gal/gal.dart';
 import 'package:qr_scanner/features/history/widgets/history_card.dart';
-import 'dart:developer';
+// import 'dart:developer';
 
 class QrCodeView extends StatelessWidget {
   final QrCodeController controller = QrCodeController();
