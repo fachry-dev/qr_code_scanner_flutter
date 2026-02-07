@@ -10,6 +10,7 @@ class HomeController {
   void addTicketToHistory(
     String name,
     String studentClass, {
+    required String id,
     bool status = false,
   }) {
     final newTicket = TicketModel(

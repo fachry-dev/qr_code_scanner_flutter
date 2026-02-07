@@ -16,38 +16,30 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   final ScreenshotController screenshotController = ScreenshotController();
   final HomeController _homeController = HomeController();
   final TextEditingController textController = TextEditingController();
-  // final String generatedId = DateTime.now().millisecondsSinceEpoch.toString();
-  final unredeemedOnly = tickets.where((t) => !t.isRedeemed).toList();
 
   String qrData = "";
 
   Future<void> _saveQrCode() async {
+    final String generatedId = DateTime.now().millisecondsSinceEpoch.toString();
+
     bool hasAccess = await Gal.hasAccess();
     if (!hasAccess) hasAccess = await Gal.requestAccess();
 
-    if (!hasAccess) {
-      hasAccess = await Gal.requestAccess();
-      final String generatedId = DateTime.now().millisecondsSinceEpoch.toString();
-      generatedId;
-    }
-    
     if (hasAccess) {
       await screenshotController.capture().then((Uint8List? image) async {
         if (image != null) {
           try {
-            await Gal.putImageBytes(
-              image,
-              name: "ScanGo_${DateTime.now().millisecondsSinceEpoch}",
-            );
+            await Gal.putImageBytes(image, name: "ScanGo_$generatedId");
 
-           if (textController.text.isNotEmpty) {
-            _homeController.addTicketToHistory(
-              textController.text, 
-              "XI PPLG",          
-              id: generatedId,     
-              status: false,
-            );
-          }
+            // LOGIKA PENYIMPANAN KE RIWAYAT
+            if (textController.text.isNotEmpty) {
+              _homeController.addTicketToHistory(
+                textController.text,
+                "XI PPLG",
+                id: generatedId,
+                status: false,
+              );
+            }
 
             if (!mounted) return;
             _showSuccessDialog(context);
@@ -131,32 +123,7 @@ class _GenerateQrViewState extends State<GenerateQrView> {
               ),
               onChanged: (val) => setState(() => qrData = val),
             ),
-
             const SizedBox(height: 30),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     if (textController.text.isNotEmpty) {
-            //       _homeController.addTicketToHistory(
-            //         textController.text,
-            //         "XI PPLG",
-            //         status: false,
-            //       );
-
-            //       ScaffoldMessenger.of(context).showSnackBar(
-            //         const SnackBar(
-            //           content: Text(
-            //             "Tiket tersimpan di History (Belum di-scan)",
-            //           ),
-            //         ),
-            //       );
-
-            //       setState(() {});
-            //     }
-            //   },
-            //   child: const Text("Generate & Simpan ke History"),
-            // ),
-            const SizedBox(height: 30),
-
             if (qrData.isNotEmpty) ...[
               Screenshot(
                 controller: screenshotController,

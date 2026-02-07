@@ -4,6 +4,7 @@ import 'package:qr_scanner/qr_code/qr_code_controller.dart';
 import 'package:qr_scanner/home/home_controller.dart';
 // import 'package:gal/gal.dart';
 import 'package:qr_scanner/features/history/widgets/history_card.dart';
+import 'package:qr_scanner/features/history/models/ticket_model.dart';
 // import 'dart:developer';
 
 class QrCodeView extends StatelessWidget {
@@ -108,7 +109,7 @@ class QrCodeView extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ValueListenableBuilder<List<TicketModel>>(
                   valueListenable: HomeController.historyNotifier,
-                  builder: (context, tickets, _) {
+                  builder: (context, List<TicketModel> tickets, _) {
                     final unredeemedOnly = tickets
                         .where((t) => !t.isRedeemed)
                         .toList();
