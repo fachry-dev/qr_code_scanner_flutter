@@ -4,6 +4,7 @@ import 'package:qr_scanner/features/history/models/ticket_model.dart';
 
 class HomeController {
   static final HomeController instance = HomeController();
+
   static final ValueNotifier<List<TicketModel>> historyNotifier =
       ValueNotifier<List<TicketModel>>([]);
 

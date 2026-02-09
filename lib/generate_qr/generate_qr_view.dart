@@ -22,21 +22,21 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   Future<void> _saveQrCode() async {
     final String generatedId = DateTime.now().millisecondsSinceEpoch.toString();
 
-    bool hasAccess = await Gal.hasAccess();
-    if (!hasAccess) hasAccess = await Gal.requestAccess();
+    setState(() {
+      qrData = generatedId;
+    });
 
+    bool hasAccess = await Gal.hasAccess();
     if (hasAccess) {
       await screenshotController.capture().then((Uint8List? image) async {
         if (image != null) {
           try {
             await Gal.putImageBytes(image, name: "ScanGo_$generatedId");
-
-            // LOGIKA PENYIMPANAN KE RIWAYAT
             if (textController.text.isNotEmpty) {
               _homeController.addTicketToHistory(
                 textController.text,
                 "XI PPLG",
-                id: generatedId,
+                id: generatedId, 
                 status: false,
               );
             }

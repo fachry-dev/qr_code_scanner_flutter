@@ -20,7 +20,7 @@ class QrCodeController {
         if (barcodes.isNotEmpty) {
           final String? qrData = barcodes.first.rawValue;
           if (qrData != null) {
-            _homeController.markAsRedeemed(qrData);
+            HomeController.instance.markAsRedeemed(qrData);
             log('Berhasil Scan dari Galeri: $qrData');
           }
         }

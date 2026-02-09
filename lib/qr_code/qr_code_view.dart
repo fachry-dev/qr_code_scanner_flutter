@@ -113,7 +113,9 @@ class QrCodeView extends StatelessWidget {
                     final unredeemedOnly = tickets
                         .where((t) => !t.isRedeemed)
                         .toList();
+
                     if (unredeemedOnly.isEmpty) return const SizedBox();
+
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 24),
