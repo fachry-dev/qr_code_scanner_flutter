@@ -15,7 +15,7 @@ class HomeController {
     bool status = false,
   }) {
     final newTicket = TicketModel(
-      id: DateTime.now().toString(),
+      id: id,
       name: name,
       classRoom: studentClass,
       isRedeemed: status,
@@ -30,19 +30,24 @@ class HomeController {
   }
 
   void markAsRedeemed(String ticketId) {
-  final index = historyNotifier.value.indexWhere((t) => t.id == ticketId);
-  
-  if (index != -1) {
-    final updatedList = List<TicketModel>.from(historyNotifier.value);
-    
-    updatedList[index] = updatedList[index].copyWith(
-      isRedeemed: true,
-      scannedAt: DateTime.now(),
+    final List<TicketModel> currentHistory = List<TicketModel>.from(
+      historyNotifier.value,
     );
-    
-    historyNotifier.value = updatedList;
+
+    int index = currentHistory.indexWhere((t) => t.id == ticketId);
+
+    if (index != -1) {
+      final updatedList = List<TicketModel>.from(historyNotifier.value);
+      updatedList[index] = updatedList[index].copyWith(
+        isRedeemed: true,
+        scannedAt: DateTime.now(),
+      );
+
+      historyNotifier.value = updatedList;
+    } else {
+      debugPrint("ID Tiket tidak ditemukan di riwayat: $ticketId");
+    }
   }
-}
 
   void goToQRCodeView(BuildContext context) {
     Navigator.push(

@@ -12,8 +12,8 @@ class HistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isRedeemed = ticket.isRedeemed;
     final Color statusColor = isRedeemed
-        ? const Color(0xFF43A078)
-        : Colors.redAccent;
+        ? const Color(0xFF43A078) 
+        : Colors.redAccent; 
 
     return InkWell(
       onTap: onTap,
@@ -69,8 +69,7 @@ class HistoryCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color:
-                    statusColor,
+                color: statusColor,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(

@@ -22,6 +22,8 @@ class QrCodeController {
           final String? qrData = barcodes.first.rawValue;
           if (qrData != null) {
             await processRedeem(qrData);
+            HomeController.instance.markAsRedeemed(qrData);
+            log('Berhasil Scan dari Galeri: $qrData');
           }
         }
       }
