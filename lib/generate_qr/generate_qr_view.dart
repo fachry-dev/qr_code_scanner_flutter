@@ -20,23 +20,31 @@ class _GenerateQrViewState extends State<GenerateQrView> {
   String qrData = "";
 
   Future<void> _saveQrCode() async {
+    // 1. Buat ID unik
     final String generatedId = DateTime.now().millisecondsSinceEpoch.toString();
 
+    // 2. Update data QR
     setState(() {
       qrData = generatedId;
     });
 
+    // 3. BERIKAN JEDA (PENTING!)
+    // Kita tunggu satu frame agar UI selesai update sebelum di-screenshot
+    await Future.delayed(const Duration(milliseconds: 100));
+
     bool hasAccess = await Gal.hasAccess();
     if (hasAccess) {
+      // 4. Baru ambil screenshot setelah dipastikan QR sudah ter-update
       await screenshotController.capture().then((Uint8List? image) async {
         if (image != null) {
           try {
             await Gal.putImageBytes(image, name: "ScanGo_$generatedId");
+
             if (textController.text.isNotEmpty) {
               _homeController.addTicketToHistory(
                 textController.text,
                 "XI PPLG",
-                id: generatedId, 
+                id: generatedId,
                 status: false,
               );
             }
@@ -48,13 +56,6 @@ class _GenerateQrViewState extends State<GenerateQrView> {
           }
         }
       });
-    } else {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Izin Galeri Ditolak. Mohon aktifkan di Settings"),
-        ),
-      );
     }
   }
 

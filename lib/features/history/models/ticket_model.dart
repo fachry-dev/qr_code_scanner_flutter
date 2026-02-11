@@ -13,6 +13,22 @@ class TicketModel {
     this.scannedAt,
   });
 
+  TicketModel copyWith({
+    String? id,
+    String? name,
+    String? classRoom,
+    bool? isRedeemed,
+    DateTime? scannedAt,
+  }) {
+    return TicketModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      classRoom: classRoom ?? this.classRoom,
+      isRedeemed: isRedeemed ?? this.isRedeemed,
+      scannedAt: scannedAt ?? this.scannedAt,
+    );
+  }
+
   factory TicketModel.fromJson(Map<String, dynamic> json) {
     return TicketModel(
       id: json['id'] as String,

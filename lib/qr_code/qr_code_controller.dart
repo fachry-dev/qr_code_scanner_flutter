@@ -2,11 +2,12 @@ import 'dart:developer';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:qr_scanner/home/home_controller.dart';
+import 'package:qr_scanner/qr_code/qr_code_service.dart';
 
 class QrCodeController {
   final ImagePicker _picker = ImagePicker();
   final BarcodeScanner _barcodeScanner = BarcodeScanner();
-  final HomeController _homeController = HomeController();
+  final QrCodeService _service = QrCodeService();
 
   Future<void> scanFromGallery() async {
     try {
@@ -20,13 +21,12 @@ class QrCodeController {
         if (barcodes.isNotEmpty) {
           final String? qrData = barcodes.first.rawValue;
           if (qrData != null) {
-            HomeController.instance.markAsRedeemed(qrData);
-            log('Berhasil Scan dari Galeri: $qrData');
+            await processRedeem(qrData);
           }
         }
       }
     } catch (e) {
-      log('Error saat membuka galeri: $e');
+      log('Error galeri: $e');
     }
   }
 
@@ -34,9 +34,21 @@ class QrCodeController {
     final List<dynamic> barcodes = capture.barcodes;
     for (final barcode in barcodes) {
       if (barcode.rawValue != null) {
-        _homeController.markAsRedeemed(barcode.rawValue!);
+        processRedeem(barcode.rawValue!);
         break;
       }
+    }
+  }
+
+  Future<void> processRedeem(String ticketId) async {
+    try {
+      await _service.redeemTicket(ticketId);
+
+      HomeController.instance.markAsRedeemed(ticketId);
+
+      log('Berhasil Redeem: $ticketId');
+    } catch (e) {
+      log('Gagal Redeem ke Server: $e');
     }
   }
 }

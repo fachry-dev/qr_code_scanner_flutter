@@ -30,17 +30,19 @@ class HomeController {
   }
 
   void markAsRedeemed(String ticketId) {
-    final List<TicketModel> currentHistory = List<TicketModel>.from(
-      historyNotifier.value,
+  final index = historyNotifier.value.indexWhere((t) => t.id == ticketId);
+  
+  if (index != -1) {
+    final updatedList = List<TicketModel>.from(historyNotifier.value);
+    
+    updatedList[index] = updatedList[index].copyWith(
+      isRedeemed: true,
+      scannedAt: DateTime.now(),
     );
-    int index = currentHistory.indexWhere((t) => t.id == ticketId);
-
-    if (index != -1) {
-      currentHistory[index].isRedeemed = true;
-      currentHistory[index].scannedAt = DateTime.now();
-      historyNotifier.value = currentHistory;
-    }
+    
+    historyNotifier.value = updatedList;
   }
+}
 
   void goToQRCodeView(BuildContext context) {
     Navigator.push(
